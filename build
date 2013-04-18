@@ -1,0 +1,19 @@
+#!/bin/bash
+
+verbose=''
+
+while (( $# > 0 )); do
+    arg="$1"
+    shift
+    case $arg in
+    -v)
+        verbose='-v'
+	;;
+    esac
+done
+
+if uname -a | grep -q 'MINGW'; then
+    SUFFIX='.exe'
+fi
+
+time support/bin/ninja$SUFFIX -C out/Default all -j6 $verbose

@@ -1,0 +1,76 @@
+#!/bin/bash
+
+clang=no
+lto=no
+cross=no
+profile=no
+
+usage() {
+    cat <<EOF
+usage: $0 [--clang]
+
+This bootstraps the gyp & ninja build system.
+EOF
+}
+
+while (( $# > 0 )); do
+    arg="$1"
+    shift
+    case $arg in
+    --clang)
+        clang=yes
+	;;
+    --lto)
+        lto=yes
+	;;
+    --cross)
+	cross=yes
+	;;
+    --profile)
+	profile=yes
+	;;
+    --help)
+	usage
+	exit
+	;;
+    esac
+done
+
+if [ $cross = 'yes' ]; then
+    export CC="i686-w64-mingw32-gcc"
+    export CXX="i686-w64-mingw32-g++"
+    clang=no
+fi
+
+if [ $clang = 'yes' ]; then
+    export CC="clang"
+    export CXX="clang++"
+    export RANLIB=/bin/true
+    clang_define='-Dclang=1'
+    cross=no
+fi
+
+if [ $lto = 'yes' ]; then
+    export CC="${CC:-gcc} -flto"
+    export CXX="${CXX:-g++} -flto"
+fi
+
+if [ $profile = 'yes' ]; then
+#    profile_flag=' -Dprofile=1'
+    export CC="${CC:-gcc} -ftest-coverage -fprofile-arcs"
+    export CXX="${CXX:-g++} -ftest-coverage -fprofile-arcs"
+fi
+
+libtype=shared_library
+
+GYP_GENERATORS=ninja support/bin/gyp -Dcomponent=$libtype $profile_flag $clang_define encircling.gyp --toplevel-dir=`pwd`
+
+echo "configured with:"
+echo "  use clang:               $clang"
+echo "  link time optimization:  $lto"
+echo "  enable profiling:        $profile"
+echo "  cross-compile for win32: $cross"
+echo "  library type:            $libtype"
+echo "  CC:                      ${CC:-<default>}"
+echo "  CXX:                     ${CXX:-<default>}"
+echo "run ./build next."
