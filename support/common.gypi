@@ -42,9 +42,9 @@
                 },
             }, { # OS != "win"
                 'cflags': [
-                     '-g',
-                     '-O0',
-                     '-D_DEBUG',
+                    '--std=c++11',
+                    '-g',
+                    '-O0',
                     '-Wall',
                     '-Wextra',
                     '-Wformat',
