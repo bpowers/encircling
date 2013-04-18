@@ -15,5 +15,27 @@
             'include',
         ],
     },
+    {
+        'target_name': 'test_encircling',
+        'type': 'executable',
+        'sources': [
+            'test/all.cc',
+        ],
+        'dependencies': [
+            'libencircling',
+            'third_party/gtest/libgtest.gyp:*',
+        ],
+        'include_dirs': [
+            'third_party/gtest/include',
+            'include',
+        ],
+        'cflags!': [
+            '-Wundef',
+        ],
+        'cflags': [
+            '-Wno-undef',
+            '-Wno-missing-noreturn',
+        ],
+    },
     ],
 }
