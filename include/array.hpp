@@ -48,6 +48,7 @@ public:
 			throw RuntimePanic("Array::operator[] out-of-bounds");
 		return _data.get()+i;
 	}
+	size_t len() { return _n; }
 private:
 	size_t const _n;
 	std::shared_ptr<T> const _data;
