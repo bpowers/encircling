@@ -12,6 +12,8 @@
 #include <memory>
 #include <cstring>
 
+#include <cstdio>
+
 namespace encircling {
 
 // Without passing an instance of this to std::shared_ptr, Valgrind
@@ -54,9 +56,10 @@ public:
 	typedef ArrayIter<T> iterator;
 	typedef ArrayIter<T> const const_iterator;
 
-	explicit Array(const size_t n) : _n(n), _data(new T[__enc_max(n,1)], _ArrayFree<T>()) {
-		memset(_data.get(), 0, n*sizeof(T));
+	static Result<Array<T> > make(size_t n) {
+		return Result<Array<T> >(Array<T>(n));
 	}
+
 	virtual ~Array() {}
 
 	T& operator[](size_t i) {
@@ -77,6 +80,9 @@ public:
 
 	size_t len() const { return _n; }
 private:
+	explicit Array(const size_t n) : _n(n), _data(new T[__enc_max(n,1)], _ArrayFree<T>()) {
+		memset((void*)_data.get(), 0, n*sizeof(T));
+	}
 	friend class ArrayIter<T>;
 	size_t const _n;
 	std::shared_ptr<T> const _data;

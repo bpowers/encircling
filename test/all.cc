@@ -10,11 +10,18 @@
 
 #include <cstdio>
 
+using namespace encircling;
+
 TEST(ArrayTest, basic_use)
 {
 	const size_t n = 20;
 	EXPECT_TRUE(true);
-	encircling::Array<double> arr(n);
+	auto r1 = Array<double>::make(n);
+	if (r1.error()) {
+		FAIL();
+		return;
+	}
+	Array<double> arr(*r1);
 
 	for (size_t i=0; i < n; ++i) {
 		// proving to myself the T& is the correct return type
@@ -32,8 +39,8 @@ TEST(ArrayTest, basic_use)
 		EXPECT_EQ(i, arr[i]);
 	}
 
-	EXPECT_THROW(arr[n], encircling::RuntimePanic);
-	EXPECT_THROW(arr[n+1], encircling::RuntimePanic);
+	EXPECT_THROW(arr[n], RuntimePanic);
+	EXPECT_THROW(arr[n+1], RuntimePanic);
 
 	{
 		double n = 0;
@@ -44,7 +51,12 @@ TEST(ArrayTest, basic_use)
 	}
 
 	// make sure this doesn't throw for some reason
-	const encircling::Array<int> zero_length(0);
+	auto r2 = Array<double>::make(0);
+	if (r2.error()) {
+		FAIL();
+		return;
+	}
+	const Array<double> zero_length(*r2);
 	EXPECT_THROW(zero_length[0], encircling::RuntimePanic);
 	EXPECT_EQ(zero_length.begin(), zero_length.end());
 	for (const int _ : zero_length) {

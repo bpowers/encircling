@@ -31,6 +31,24 @@ private:
 	char const* _msg;
 };
 
+/// passes T by value, but allows us to indicate if there was an error
+/// and T is invalid.
+template<typename T>
+class Result
+{
+public:
+	explicit Result(T r) : _result(r), _err(NULL) {}
+	Result(T r, char const* const err) : _result(r), _err(err) {}
+
+	T operator*() { return _result; }
+
+	bool error() const { return _err != NULL; }
+	char const* error_msg() const { return _err; }
+private:
+	T _result;
+	char const* _err;
+};
+
 }
 
 #endif // _ENCIRCLING__COMMON_HPP_
