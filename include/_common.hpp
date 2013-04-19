@@ -17,6 +17,8 @@
 
 namespace encircling {
 
+#define __enc_max(a, b) (((a) < (b)) ? (b) : (a))
+
 class RuntimePanic : public std::exception {
 public:
 	explicit RuntimePanic(char const* msg) : _msg(msg) {}
