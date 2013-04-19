@@ -1,5 +1,5 @@
-libencircling - Go-style programming for C++11
-==============================================
+encircling - Go-style programming for C++11
+===========================================
 
 I really like Go.  It gives very clean, simple building blocks and
 abstractions for building robust and understandable applications.
@@ -26,10 +26,10 @@ doesn't necessarily mean there is a problem.
 
 It turns out we can do something almost as tidy in C++:
 
-    auto resource_res = Resource::acquire();
-    if (resource_res.error()) {
-        log(ERROR, "Resource::acquire(): %s", resource_res.error_msg());
+    auto result = Resource::acquire();
+    if (result.error()) {
+        log(ERROR, "Resource::acquire(): %s", result.error_msg());
         return;
     }
-    auto resource = *resource_res;
+    auto resource = *result;
     // use resource
