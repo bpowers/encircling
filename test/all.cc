@@ -14,14 +14,14 @@ using namespace encircling;
 
 TEST(ArrayTest, basic_use)
 {
-	const size_t n = 20;
-	EXPECT_TRUE(true);
-	auto r1 = Array<double>::make(n);
-	if (r1.error()) {
+	size_t n = 20;
+
+	auto arr_res = Array<double>::make(n);
+	if (arr_res.error()) {
 		FAIL();
 		return;
 	}
-	Array<double> arr(*r1);
+	auto arr(*arr_res);
 
 	for (size_t i=0; i < n; ++i) {
 		// proving to myself the T& is the correct return type
@@ -51,16 +51,22 @@ TEST(ArrayTest, basic_use)
 	}
 
 	// make sure this doesn't throw for some reason
-	auto r2 = Array<double>::make(0);
-	if (r2.error()) {
+	auto zero_len_res = Array<double>::make(0);
+	if (zero_len_res.error()) {
 		FAIL();
 		return;
 	}
-	const Array<double> zero_length(*r2);
+	const Array<double> zero_length(*zero_len_res);
 	EXPECT_THROW(zero_length[0], encircling::RuntimePanic);
 	EXPECT_EQ(zero_length.begin(), zero_length.end());
+	// looping through a zero_length array should never invoke the
+	// loop body.
 	for (const int _ : zero_length) {
 		(void)_;
 		FAIL();
 	}
+
+	n = 128;
+	Array<void*> third = *Array<void*>::make(n);
+	EXPECT_EQ(n, third.len());
 }
