@@ -74,9 +74,9 @@ public:
 	}
 
 	iterator begin() { return ArrayIter<T>(*this, 0); }
-	iterator end() { return ArrayIter<T>(*this, this->last()); }
+	iterator end() { return ArrayIter<T>(*this, _n); }
 	const_iterator begin() const { return ArrayIter<T>(*this, 0); }
-	const_iterator end() const { return ArrayIter<T>(*this, this->last()); }
+	const_iterator end() const { return ArrayIter<T>(*this, _n); }
 
 	size_t len() const { return _n; }
 private:
@@ -87,7 +87,7 @@ private:
 	size_t const _n;
 	std::shared_ptr<T> const _data;
 
-	size_t last() const { return _n > 0 ? _n - 1 : 0; }
+	//size_t last() const { return _n > 0 ? _n - 1 : 0; }
 };
 
 } // namespace encircling

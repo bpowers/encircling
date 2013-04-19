@@ -16,12 +16,13 @@ TEST(ArrayTest, basic_use)
 {
 	size_t n = 20;
 
-	auto arr_res = Array<double>::make(n);
-	if (arr_res.error()) {
-		FAIL();
+	auto result = Array<double>::make(n);
+	if (result.error()) {
+		printf("Array::make(%zu) failed: %s\n", n, result.error_msg());
 		return;
 	}
-	auto arr(*arr_res);
+	// arr is now of type Array<double>
+	auto arr = *result;
 
 	for (size_t i=0; i < n; ++i) {
 		// proving to myself the T& is the correct return type
@@ -32,11 +33,20 @@ TEST(ArrayTest, basic_use)
 		EXPECT_EQ(arr[i], val);
 	}
 
+	{
+		double n = 0;
+		for (double& val : arr) {
+			val = n;
+			n += 1;
+		}
+	}
+
 	for (size_t i=0; i < n; ++i) {
+		EXPECT_EQ(i, arr[i]);
 		// proving to myself the T& is the correct return type
 		// for operator[]
-		arr[i] = i;
-		EXPECT_EQ(i, arr[i]);
+		arr[i] = i*2;
+		EXPECT_EQ(i*2, arr[i]);
 	}
 
 	EXPECT_THROW(arr[n], RuntimePanic);
@@ -46,17 +56,17 @@ TEST(ArrayTest, basic_use)
 		double n = 0;
 		for (double val : arr) {
 			EXPECT_EQ(n, val);
-			n += 1;
+			n += 2;
 		}
 	}
 
 	// make sure this doesn't throw for some reason
-	auto zero_len_res = Array<double>::make(0);
+	auto zero_len_res = Array<int>::make(0);
 	if (zero_len_res.error()) {
 		FAIL();
 		return;
 	}
-	const Array<double> zero_length(*zero_len_res);
+	const Array<int> zero_length(*zero_len_res);
 	EXPECT_THROW(zero_length[0], encircling::RuntimePanic);
 	EXPECT_EQ(zero_length.begin(), zero_length.end());
 	// looping through a zero_length array should never invoke the
