@@ -8,11 +8,8 @@
 
 #include "_common.hpp"
 
-#include <iterator>
 #include <memory>
 #include <cstring>
-
-#include <cstdio>
 
 namespace encircling {
 
@@ -29,32 +26,11 @@ public:
 };
 
 template<typename T>
-class Array;
-
-template<typename T>
-class ArrayIter : public std::iterator<std::forward_iterator_tag, T>
-{
-public:
-	ArrayIter(const Array<T>& a, const size_t i) : _i(i), _arr(a) {}
-	ArrayIter& operator++() {_i++; return *this;}
-	bool operator==(const ArrayIter& rhs) const {
-		return _arr._data.get() == rhs._arr._data.get() && _i == rhs._i;
-	}
-	bool operator!=(const ArrayIter& rhs) const {
-		return _arr._data.get() != rhs._arr._data.get() || _i != rhs._i;
-	}
-	T& operator*() { return _arr._data.get()[_i]; }
-private:
-	size_t _i;
-	const Array<T>& _arr;
-};
-
-template<typename T>
 class Array {
 public:
 	typedef T value_type;
-	typedef ArrayIter<T> iterator;
-	typedef ArrayIter<T> const const_iterator;
+	typedef Iter<Array, T> iterator;
+	typedef Iter<Array, T> const const_iterator;
 
 	static Result<Array<T> > make(size_t n) {
 		return Result<Array<T> >(Array<T>(n));
@@ -73,17 +49,17 @@ public:
 		return _data.get()[i];
 	}
 
-	iterator begin() { return ArrayIter<T>(*this, 0); }
-	iterator end() { return ArrayIter<T>(*this, _n); }
-	const_iterator begin() const { return ArrayIter<T>(*this, 0); }
-	const_iterator end() const { return ArrayIter<T>(*this, _n); }
+	iterator begin() { return iterator(*this, 0); }
+	iterator end() { return iterator(*this, _n); }
+	const_iterator begin() const { return iterator(*this, 0); }
+	const_iterator end() const { return iterator(*this, _n); }
 
 	size_t len() const { return _n; }
 private:
 	explicit Array(const size_t n) : _n(n), _data(new T[__enc_max(n,1)], _ArrayFree<T>()) {
 		memset((void*)_data.get(), 0, n*sizeof(T));
 	}
-	friend class ArrayIter<T>;
+	friend class Iter<Array, T>;
 	size_t const _n;
 	std::shared_ptr<T> const _data;
 

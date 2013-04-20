@@ -6,6 +6,7 @@
 #ifndef _ENCIRCLING__COMMON_HPP_
 #define _ENCIRCLING__COMMON_HPP_
 
+#include <iterator>
 #include <exception>
 #include <stddef.h>
 
@@ -18,6 +19,24 @@
 namespace encircling {
 
 #define __enc_max(a, b) (((a) < (b)) ? (b) : (a))
+
+template<typename Container, typename T>
+class Iter : public std::iterator<std::forward_iterator_tag, T>
+{
+public:
+	Iter(const Container& a, const size_t i) : _i(i), _cont(a) {}
+	Iter& operator++() {_i++; return *this;}
+	bool operator==(const Iter& rhs) const {
+		return _cont._data.get() == rhs._cont._data.get() && _i == rhs._i;
+	}
+	bool operator!=(const Iter& rhs) const {
+		return _cont._data.get() != rhs._cont._data.get() || _i != rhs._i;
+	}
+	T& operator*() { return _cont._data.get()[_i]; }
+private:
+	size_t _i;
+	const Container& _cont;
+};
 
 class RuntimePanic : public std::exception {
 public:
