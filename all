@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./clean && ./configure --use-clang && ./build && ./test --valgrind && \
+./clean && ./configure --use-clang -q && ./build && ./test --valgrind && \
 	echo 'tests passed.  all systems are a go.'
