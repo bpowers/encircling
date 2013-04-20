@@ -13,7 +13,7 @@ while (( $# > 0 )); do
 done
 
 if uname -a | grep -q 'MINGW'; then
-    SUFFIX='.exe'
+    suffix='.exe'
 fi
 
-time support/bin/ninja$SUFFIX -C out/Default all -j6 $verbose
+time support/bin/ninja$suffix -C out/Default all -j6 $verbose

@@ -7,7 +7,7 @@ profile=no
 
 usage() {
     cat <<EOF
-usage: $0 [--clang]
+usage: $0 [--use-clang] [--use-lto] [--use-mingw] [--use-profile]
 
 This bootstraps the gyp & ninja build system.
 EOF
@@ -17,16 +17,16 @@ while (( $# > 0 )); do
     arg="$1"
     shift
     case $arg in
-    --clang)
+    --use-clang)
         clang=yes
 	;;
-    --lto)
+    --use-lto)
         lto=yes
 	;;
-    --cross)
+    --use-mingw)
 	cross=yes
 	;;
-    --profile)
+    --use-profile)
 	profile=yes
 	;;
     --help)
