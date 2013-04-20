@@ -1661,7 +1661,9 @@ inline const char* GetEnv(const char* name) {
 // imitation of standard behaviour.
 void Abort();
 #else
-inline void Abort() { abort(); }
+#define _attr_noreturn __attribute__((noreturn))
+inline void _attr_noreturn Abort() { abort(); }
+#undef _attr_noreturn
 #endif  // GTEST_OS_WINDOWS_MOBILE
 
 }  // namespace posix

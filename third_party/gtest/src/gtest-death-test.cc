@@ -205,12 +205,13 @@ static const char kDeathTestInternalError = 'I';
 // AbortReason, DeathTestOutcome, and flag characters above.
 enum DeathTestOutcome { IN_PROGRESS, DIED, LIVED, RETURNED, THREW };
 
+#define _attr_noreturn __attribute__((noreturn))
 // Routine for aborting the program which is safe to call from an
 // exec-style death test child process, in which case the error
 // message is propagated back to the parent process.  Otherwise, the
 // message is simply printed to stderr.  In either case, the program
 // then exits with status 1.
-void DeathTestAbort(const String& message) {
+void _attr_noreturn DeathTestAbort(const String& message) {
   // On a POSIX system, this function may be called from a threadsafe-style
   // death test child process, which operates on a very small stack.  Use
   // the heap for any additional non-minuscule memory requirements.
@@ -427,7 +428,7 @@ void DeathTestImpl::ReadAndInterpretStatusByte() {
 // Should be called only in a death test child process.
 // Writes a status byte to the child's status file descriptor, then
 // calls _exit(1).
-void DeathTestImpl::Abort(AbortReason reason) {
+void _attr_noreturn DeathTestImpl::Abort(AbortReason reason) {
   // The parent process considers the death test to be a failure if
   // it finds any data in our pipe.  So, here we write a single flag byte
   // to the pipe, then exit.
