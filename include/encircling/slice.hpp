@@ -28,7 +28,7 @@ public:
 		return Result<Slice<T> >(Slice<T>(n, cap));
 	}
 
-	virtual ~Slice() {}
+	~Slice() {}
 
 	T& operator[](size_t i) {
 		if (unlikely(i >= _n))

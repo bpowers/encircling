@@ -24,7 +24,7 @@ public:
 		return Result<Array<T> >(Array<T>(n));
 	}
 
-	virtual ~Array() {}
+	~Array() {}
 
 	T& operator[](size_t i) {
 		if (unlikely(i >= _n))
