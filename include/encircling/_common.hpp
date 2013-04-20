@@ -68,6 +68,18 @@ private:
 	char const* _err;
 };
 
+// Without passing an instance of this to std::shared_ptr, Valgrind
+// reports a mismatched free error.
+template<typename T>
+class _ArrayFree
+{
+public:
+    void operator() (T* d) const
+    {
+        delete[] d;
+    }
+};
+
 }
 
 #endif // _ENCIRCLING__COMMON_HPP_

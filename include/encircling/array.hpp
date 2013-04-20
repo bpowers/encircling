@@ -13,18 +13,6 @@
 
 namespace encircling {
 
-// Without passing an instance of this to std::shared_ptr, Valgrind
-// reports a mismatched free error.
-template<typename T>
-class _ArrayFree
-{
-public:
-    void operator() (T* d) const
-    {
-        delete[] d;
-    }
-};
-
 template<typename T>
 class Array {
 public:
@@ -62,8 +50,6 @@ private:
 	friend class Iter<Array, T>;
 	size_t const _n;
 	std::shared_ptr<T> const _data;
-
-	//size_t last() const { return _n > 0 ? _n - 1 : 0; }
 };
 
 } // namespace encircling
