@@ -1,16 +1,42 @@
 #!/bin/bash
 
+valgrind=no
+
+usage() {
+    cat <<EOF
+usage: $0 [--valgrind]
+
+Run all unit tests.
+EOF
+}
+
+while (( $# > 0 )); do
+    arg="$1"
+    shift
+    case $arg in
+    --valgrind)
+        valgrind=yes
+	;;
+    --help)
+	usage
+	exit
+	;;
+    esac
+done
+
 if uname -a | grep -q 'MINGW'; then
     suffix='.exe'
 fi
 
-lcov --zerocounters --directory out/Default &>/dev/null || true
+if [ $valgrind = 'yes' ]; then
+    vg='valgrind'
+fi
 
 rm -f .FAILED
 
 for t in out/Default/test_*$suffix; do
     echo -e "\n\033[1;34mrunning $t\033[0m"
-    $t || (echo -e '\n\033[1;31mFAILED\033[0m'; touch .FAILED)
+    $vg $t || (echo -e '\n\033[1;31mFAILED\033[0m'; touch .FAILED)
     echo ''
 done
 
