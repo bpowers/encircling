@@ -1,3 +1,4 @@
+#-*- mode: python -*-
 {
     'includes': [
         '../../support/common.gypi',

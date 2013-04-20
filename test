@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if uname -a | grep -q 'MINGW'; then
+    suffix='.exe'
+fi
+
+lcov --zerocounters --directory out/Default &>/dev/null || true
+
+rm -f .FAILED
+
+for t in out/Default/test_*$SUFFIX; do
+    echo -e "\n\033[1;34mrunning $t\033[0m"
+    $t || (echo -e '\n\033[1;31mFAILED\033[0m'; touch .FAILED)
+    echo ''
+done
+
+[ ! -e .FAILED ]; err=$?
+rm -f .FAILED
+
+exit $err

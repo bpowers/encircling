@@ -1,3 +1,4 @@
+#-*- mode: python -*-
 {
     'includes': [
         'support/common.gypi',
@@ -19,7 +20,7 @@
         'target_name': 'test_encircling',
         'type': 'executable',
         'sources': [
-            'test/all.cc',
+            'tests/all.cc',
         ],
         'dependencies': [
             'libencircling',
