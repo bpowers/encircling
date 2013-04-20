@@ -2,9 +2,9 @@
 // Use of this source code is governed by the MIT
 // license that can be found in the LICENSE file.
 
-#include "array.hpp"
-#include "slice.hpp"
-#include "string.hpp"
+#include <encircling/array.hpp>
+#include <encircling/slice.hpp>
+#include <encircling/string.hpp>
 
 #include <gtest/gtest.h>
 

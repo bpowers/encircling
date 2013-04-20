@@ -13,7 +13,7 @@
             'src/string.cc',
         ],
         'include_dirs': [
-            'include',
+            'include/encircling',
         ],
     },
     {
