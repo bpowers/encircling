@@ -12,6 +12,11 @@ while (( $# > 0 )); do
     esac
 done
 
+if [ ! -d out/Default ]; then
+    echo >&2 'error: run configure before build'
+    exit 1
+fi
+
 if uname -a | grep -q 'MINGW'; then
     suffix='.exe'
 fi

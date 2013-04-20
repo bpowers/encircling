@@ -4,10 +4,11 @@ clang=no
 lto=no
 cross=no
 profile=no
+quiet=no
 
 usage() {
     cat <<EOF
-usage: $0 [--use-clang] [--use-lto] [--use-mingw] [--use-profile]
+usage: $0 [--use-clang] [--use-lto] [--use-mingw] [--use-profile] [-q]
 
 This bootstraps the gyp & ninja build system.
 EOF
@@ -28,6 +29,9 @@ while (( $# > 0 )); do
 	;;
     --use-profile)
 	profile=yes
+	;;
+    -q)
+	quiet=yes
 	;;
     --help)
 	usage
@@ -65,12 +69,16 @@ libtype=shared_library
 
 GYP_GENERATORS=ninja support/bin/gyp -Dcomponent=$libtype $profile_flag $clang_define encircling.gyp --toplevel-dir=`pwd`
 
-echo "configured with:"
-echo "  use clang:               $clang"
-echo "  link time optimization:  $lto"
-echo "  enable profiling:        $profile"
-echo "  cross-compile for win32: $cross"
-echo "  library type:            $libtype"
-echo "  CC:                      ${CC:-<default>}"
-echo "  CXX:                     ${CXX:-<default>}"
-echo "run ./build next."
+if [ $quiet = 'yes' ]; then
+    exit
+fi
+
+echo >&2 "configured with:"
+echo >&2 "  use clang:               $clang"
+echo >&2 "  link time optimization:  $lto"
+echo >&2 "  enable profiling:        $profile"
+echo >&2 "  cross-compile for win32: $cross"
+echo >&2 "  library type:            $libtype"
+echo >&2 "  CC:                      ${CC:-<default>}"
+echo >&2 "  CXX:                     ${CXX:-<default>}"
+echo >&2 "run ./build next."
