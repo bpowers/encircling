@@ -8,7 +8,10 @@
 
 #include <iterator>
 #include <exception>
-#include <stddef.h>
+#include <cstddef>
+#include <cstdint>
+
+typedef uint8_t byte;
 
 // the '!!' is from Love's LSP book.  it ensures that integer and
 // pointer values are converted to boolean values (not (not x)), so

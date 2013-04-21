@@ -148,4 +148,21 @@ TEST(All, slice)
 	n = 128;
 	Slice<void*> third = *Slice<void*>::make(n);
 	EXPECT_EQ(n, third.len());
+
+	n = 32;
+	auto parent = *Slice<byte>::make(n);
+	EXPECT_EQ(32UL, parent.len());
+
+	Slice<byte> sub1 = parent(1);
+	EXPECT_EQ(31UL, sub1.len());
+	EXPECT_EQ(31UL, sub1.cap());
+
+	Slice<byte> sub2 = parent(3,5);
+	EXPECT_EQ(2UL, sub2.len());
+	EXPECT_EQ(29UL, sub2.cap());
+
+	// should end up with parent[20:24]
+	Slice<byte> subsub1 = parent(16,32)(4,8);
+	EXPECT_EQ(4UL, subsub1.len());
+	EXPECT_EQ(12UL, subsub1.cap());
 }
