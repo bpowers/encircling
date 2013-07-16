@@ -9,7 +9,7 @@
 #include <iterator>
 #include <exception>
 #include <cstddef>
-#include <cstdint>
+#include <stdint.h>
 
 typedef uint8_t byte;
 
